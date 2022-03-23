@@ -112,8 +112,8 @@ const validate = () => {
 				}
 			}
 		}
-		return true;
 	}
+	return true;
 };
 
 const checkGuess = e => {
