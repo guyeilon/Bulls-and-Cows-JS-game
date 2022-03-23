@@ -9,13 +9,16 @@ nav {
 section {
     flex: 1;
     padding: 2rem;
-    padding-top: 6.5rem;
+    padding-top: 2rem;
     font-size: 1.2rem;
     display: none;
     position: absolute;
     width: 100%;
-    height: calc(100vh - 100px);
+    height: 100%;
+
 }
+
+
 
 section:target {
     display: block;

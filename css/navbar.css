@@ -7,7 +7,8 @@
      padding: 1rem 2rem;
      box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
      border: 1px solid rgba(255, 255, 255, 0.18);
-     background-color: var(--primary-color)
+     background-color: var(--primary-color);
+     position: relative;
 }
 
 .app__navbar-links {
@@ -19,27 +20,65 @@
 }
 
 
-li a {
+.app__navbar-links li a div {
      padding: 0.5rem 1rem;
      margin: 0.5rem;
      border-radius: 0.5rem;
-     background-color: #fff;
-     color: #000;
+
+     color: var(--secondary-color);
      font-weight: 800;
      cursor: pointer;
      transition: all 0.3s ease-in-out;
      text-decoration: none;
+     display: block;
 
 }
 
 
 
-.active, a:hover {
+.btn.active, div.btn:hover {
      background-color: var(--secondary-color);
      color: #fff;
 
 }
 
+.app__navbar-links a svg {
+     display: none;
+     width: 35px;
+     height: 35px;
+     color: var(--secondary-color);
+     margin: 1.5rem;
+
+}
+
+.short-header {
+     display: none;
+
+}
+
+@media screen and (max-width: 950px) {
+     .app__navbar-links a svg {
+          display: block;
+
+     }
+
+     .app__navbar-links li a div {
+
+          display: none;
+
+     }
+
+     .short-header {
+          display: block;
+
+     }
+
+     .long-header {
+          display: none;
+
+     }
 
 
-@media screen and (max-width: 450px) {}
+
+
+}

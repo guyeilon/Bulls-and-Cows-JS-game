@@ -1,9 +1,34 @@
+.app__game-section-container {
+     display: flex;
+     flex-direction: row;
+     align-items: center;
+     justify-content: center;
+
+}
+
+@media screen and (max-width: 950px) {
+     .app__game-section-container {
+
+          flex-direction: column;
+
+     }
+}
+
 .app__game-container {
+
      display: flex;
      justify-content: center;
      align-items: center;
      flex-direction: column;
      width: 100%;
+     flex: 1;
+}
+
+.app__table-container {
+     flex: 1;
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
 }
 
 .app__guess-header {
@@ -42,6 +67,8 @@ input {
      text-align: center;
      box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
 }
+
+
 
 input:focus {
      border: 2px solid yellowgreen;
@@ -111,4 +138,17 @@ input:focus {
      display: inline-block;
      color: red;
      height: 20px;
+}
+
+@media screen and (max-width: 950px) {
+     input {
+          width: 3rem;
+          height: 3rem;
+     }
+
+     .styled-table {
+
+          min-width: 300px;
+
+     }
 }
