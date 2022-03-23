@@ -1,0 +1,80 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap");
+
+:root {
+     --font-base: "DM Sans", sans-serif;
+
+     --primary-color: #edf2f8;
+     --secondary-color: #313bac;
+     --black-color: #030303;
+     --lightGray-color: #e4e4e4;
+     --gray-color: #6b7688;
+     --brown-color: #46364a;
+     --white-color: #ffffff;
+}
+
+.app {
+     background-color: var(--primary-color);
+     font-family: var(--font-base);
+}
+
+.app__flex {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+}
+
+.app__guess-container {
+     flex: 1;
+     border-radius: 15px;
+     display: flex;
+     flex-direction: column;
+
+}
+
+.head-text {
+     font-size: 2.75rem;
+     font-weight: 800;
+     text-align: center;
+     color: var(--secondary-color);
+     text-transform: capitalize;
+
+}
+
+.h-text {
+     font-size: 1.5rem;
+     font-weight: 800;
+     text-align: center;
+     color: var(--secondary-color);
+     text-transform: capitalize;
+
+}
+
+.p-text {
+     font-size: 1.5rem;
+     text-align: left;
+     color: var(--gray-color);
+     line-height: 1.5;
+
+
+}
+
+
+@media screen and (min-width: 2000px) {
+     .head-text {
+          font-size: 4rem;
+     }
+
+     .p-text {
+          font-size: 2rem;
+     }
+}
+
+@media screen and (max-width: 950px) {
+     .head-text {
+          font-size: 2rem;
+     }
+
+     .p-text {
+          font-size: 1rem;
+     }
+}

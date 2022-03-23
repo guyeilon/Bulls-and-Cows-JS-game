@@ -1,0 +1,16 @@
+.app__instruction {
+     margin: 2rem;
+}
+
+.app__instruction a {
+     text-decoration: none;
+     color: var(--secondary-color);
+     font-weight: bold;
+
+}
+
+.app__instruction a:hover {
+     background-color: var(--secondary-color);
+     color: #fff;
+
+}

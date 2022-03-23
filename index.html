@@ -1,0 +1,149 @@
+<html>
+
+<head>
+	<link rel="stylesheet" href="./css/index.css" />
+
+
+	<title>Bulls and Cows</title>
+</head>
+
+<body onload="init()" class="app">
+
+	<nav class="app__navbar" id="navbar">
+		<p class="head-text">Bulls and Cows</p>
+		<ul class="app__navbar-links">
+			<li>
+				<a href="#" class="btn active">Home</a> |
+			</li>
+			<li>
+				<a href="#game" class="btn">Start Game</a> |
+			</li>
+			<li>
+				<a href="#scores" class="btn">Board Scores</a> |
+			</li>
+			<li>
+				<a href="#instruction" class="btn">How To Play</a>
+			</li>
+		</ul>
+	</nav>
+	<section id="home">
+
+	</section>
+
+	<section id="game">
+		<div class="app__game-container ">
+			<div class="app__guess-header">
+				<p class="p-text" id="description">Try to guess the number:</p>
+
+			</div>
+			<div class="app__guess-form">
+
+			</div>
+			<div class="app__error-container" id="error_validation"></div>
+			<form id="form">
+				<div class="digits">
+					<input id="guessed_number1" type="text" name="digit1" autocomplete="off" inputmode="numeric"
+						placeholder="?" />
+					<input id="guessed_number2" type="text" name="digit2" autocomplete="off" inputmode="numeric"
+						placeholder="?" />
+					<input id="guessed_number3" type="text" name="digit3" autocomplete="off" inputmode="numeric"
+						placeholder="?" />
+					<input id="guessed_number4" type="text" name="digit4" autocomplete="off" inputmode="numeric"
+						placeholder="?" />
+
+				</div>
+				<button type="submit" id="guess_button">Guess!</button>
+			</form>
+			<button onclick="newGame()">New Game</button>
+
+			<div>
+
+				<table class="styled-table">
+
+					<thead>
+						<tr>
+							<th>Try</th>
+							<th>Guess</th>
+							<th>Result</th>
+						</tr>
+					</thead>
+					<tbody id="game-status"></tbody>
+				</table>
+				<div class="modal" id="modal-one" app__flex>
+					<div class="modal-bg modal-exit"></div>
+					<div class="modal-container">
+						<div>Great Job!</div>
+						<p id="time"></p>
+						<form id="name-form">
+							<input id="name" type="text" name="digit1" autocomplete="off" inputmode="search"
+								placeholder="enter your name" />
+							<button type="submit">Save</button>
+						</form>
+						<span class="modal-close modal-exit">X</span>
+					</div>
+				</div>
+
+				<div class="container">
+					<a data-modal="modal-one"></a>
+				</div>
+				<p id="result"></p>
+			</div>
+		</div>
+
+	</section>
+	<section id="scores">
+		<div class="app__flex">
+			<table class="styled-table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Tries</th>
+						<th>Time</th>
+					</tr>
+				</thead>
+				<tbody id="scores-table"></tbody>
+			</table>
+		</div>
+
+	</section>
+
+	<section id="instruction">
+		<div class="app__instruction ">
+			<span class="h-text">How to Play</span>
+			<p class="p-text">
+				Bulls and Cows is played against the computer. The computer thinks of a number, while you tries to
+				guess it.
+			</p>
+			<ul class="p-text">
+				<li>
+					The number to be guessed must be a 4 digit number, using only digits from 1 - 9, each digit at
+					most once. e.g. 1234 is
+					valid, 0123 is not valid, 9877 is not valid, 9876 is valid.
+
+				</li>
+				<li>
+					For every guess that the player makes, he gets 2 values - the number of bulls and the number of
+					cows. 1 bull means the
+					guess contains and the target number have 1 digit in common, and in the correct position. 1 cow
+					means the guess and the
+					target have 1 digit in common, but not in correct position. e.g. Let the target be 1234.
+					Guessing 4321 will give 0 bulls
+					and 4 cows. 3241 will give 1 bull and 3 cows. 4 bulls means you have won the game!
+
+
+				</li>
+			</ul>
+			<p class="p-text">
+				P.S. If you still have doubts about the rules, check it over here:
+				<a href="https://en.wikipedia.org/wiki/Bulls_and_Cows" target="_blank">Visit wikipedia</a>
+			</p>
+		</div>
+	</section>
+
+
+
+	<script src="./js/utils.js"></script>
+	<script src="./js/main.js"></script>
+</body>
+
+</html>
