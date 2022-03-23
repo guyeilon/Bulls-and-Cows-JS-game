@@ -152,3 +152,19 @@ input:focus {
 
      }
 }
+
+/* Ripple effect */
+.ripple {
+     background-position: center;
+     transition: background 0.8s;
+}
+
+.ripple:hover {
+     background: #313bac radial-gradient(circle, transparent 1%, #4b58e2 1%) center/15000%;
+}
+
+.ripple:active {
+     background-color: #313bac;
+     background-size: 100%;
+     transition: background 0s;
+}
