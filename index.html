@@ -5,6 +5,8 @@
 		integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 	<link rel="stylesheet" href="./css/index.css" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="shortcut icon" href="/images/favicon.png" type="image/x-icon">
+
 
 
 	<title>Bulls and Cows</title>
@@ -13,11 +15,11 @@
 <body onload="init()" class="app">
 
 	<nav class="app__navbar" id="navbar">
-		<p class="head-text long-header">Bulls and Cows</p>
+		<p class="head-text long-header">Bulls & Cows</p>
 		<p class="head-text short-header ">B&C</p>
 		<ul class="app__navbar-links">
 			<li>
-				<a href="#">
+				<a href="#home">
 					<div class="btn active">Home</div>
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 						class="bi bi-house" viewBox="0 0 16 16">
@@ -31,7 +33,7 @@
 
 			<li>
 				<a href="#game">
-					<div class="btn">Start Game</div>
+					<div class="btn">Game</div>
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 						class="bi bi-joystick" viewBox="0 0 16 16">
 						<path
@@ -44,7 +46,7 @@
 			</li>
 			<li>
 				<a href="#scores">
-					<div class="btn">Board Scores</div>
+					<div class="btn">Scoreboard</div>
 					<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
 						class="bi bi-trophy" viewBox="0 0 16 16">
 						<path
@@ -67,23 +69,23 @@
 	</nav>
 
 	<section id="home">
-
-
+		<div id="hero" class="visible ">hi</div>
 	</section>
 
 	<section id="game">
+		<div class="h-text">game board</div>
 		<div class="app__game-section-container">
 			<div class="app__game-container ">
 				<div class="app__guess-header">
 					<p class="p-text" id="description">Try to guess the number:</p>
+					<button onclick="newGame()" class="ripple " id="start-new-game">Start Game</button>
 
 				</div>
-				<div class="app__guess-form">
-
+				<div class="app__guess-form ">
 				</div>
-				<div class="app__error-container" id="error_validation"></div>
-				<form id="form">
-					<div class="digits">
+				<div class="app__msg-container" id="user-msg"></div>
+				<form id="form" class="hidden">
+					<div class="digits  ">
 						<input id="guessed_number1" type="text" name="digit1" autocomplete="off"
 							inputmode="numeric" placeholder="?" />
 						<input id="guessed_number2" type="text" name="digit2" autocomplete="off"
@@ -96,12 +98,15 @@
 					</div>
 					<button type="submit" id="guess_button" class="ripple ">Guess!</button>
 				</form>
-				<button onclick="newGame()" class="ripple">New Game</button>
+
 			</div>
-			<div class="app__table-container">
+			<div class="app__board-container">
+				<div class="app__board-hint app__flex">
+					<div class="p-text  ">Your recent moves:</div>
 
-				<table class="styled-table">
-
+				</div>
+				<div class="app__table-container app__flex ""> 
+					<table class=" styled-table">
 					<thead>
 						<tr>
 							<th>Try</th>
@@ -110,16 +115,17 @@
 						</tr>
 					</thead>
 					<tbody id="game-status"></tbody>
-				</table>
-				<div class="modal" id="modal-one" app__flex>
+					</table>
+				</div>
+				<div class="modal" id="modal-one">
 					<div class="modal-bg modal-exit"></div>
-					<div class="modal-container">
-						<div>Great Job!</div>
+					<div class="modal-container ">
+						<div class="h-text">Great Job!</div>
 						<p id="time"></p>
-						<form id="name-form">
+						<form id="name-form" class="app__flex">
 							<input id="name" type="text" name="digit1" autocomplete="off" inputmode="search"
 								placeholder="enter your name" />
-							<button type="submit">Save</button>
+							<button class="ripple " type="submit">save your record</button>
 						</form>
 						<span class="modal-close modal-exit">X</span>
 					</div>
@@ -129,16 +135,19 @@
 					<a data-modal="modal-one"></a>
 				</div>
 				<p id="result"></p>
+
 			</div>
 		</div>
 
 
 	</section>
 	<section id="scores">
+		<div class="h-text">records table</div>
 		<div class="app__flex">
 			<table class="styled-table">
 				<thead>
 					<tr>
+						<th>No.</th>
 						<th>Name</th>
 						<th>Tries</th>
 						<th>Time</th>
@@ -152,7 +161,7 @@
 
 	<section id="instruction">
 		<div class="app__instruction ">
-			<span class="h-text">How to Play</span>
+			<div class="h-text">How to Play</div>
 			<p class="p-text">
 				Bulls and Cows is played against the computer. The computer thinks of a number, while you tries to
 				guess it.

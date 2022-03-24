@@ -8,7 +8,7 @@
      box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
      border: 1px solid rgba(255, 255, 255, 0.18);
      background-color: var(--primary-color);
-     position: relative;
+     position: sticky;
 }
 
 .app__navbar-links {
@@ -30,7 +30,7 @@
      cursor: pointer;
      transition: all 0.3s ease-in-out;
      text-decoration: none;
-     display: block;
+
 
 }
 
@@ -60,6 +60,7 @@
      .app__navbar-links a svg {
           display: block;
 
+
      }
 
      .app__navbar-links li a div {
@@ -77,8 +78,6 @@
           display: none;
 
      }
-
-
 
 
 }

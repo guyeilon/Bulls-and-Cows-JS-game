@@ -1,18 +1,13 @@
 .app__game-section-container {
      display: flex;
      flex-direction: row;
-     align-items: center;
+
      justify-content: center;
+     align-items: baseline;
 
 }
 
-@media screen and (max-width: 950px) {
-     .app__game-section-container {
 
-          flex-direction: column;
-
-     }
-}
 
 .app__game-container {
 
@@ -22,10 +17,30 @@
      flex-direction: column;
      width: 100%;
      flex: 1;
+
+}
+
+.app__board-container {
+     flex: 1;
+     display: flex;
+     flex-direction: column;
+     /* justify-content: center; */
+     /* align-self: center; */
+     flex-wrap: wrap;
+
+
+}
+
+button#start-new-game {
+     align-items: center;
+     display: flex;
+     /* min-width: 150px; */
+     text-align: center;
+
 }
 
 .app__table-container {
-     flex: 1;
+
      display: flex;
      flex-direction: column;
      justify-content: center;
@@ -33,10 +48,14 @@
 
 .app__guess-header {
      margin-top: 1rem;
+     align-items: center;
+     display: flex;
+     flex-direction: column;
 }
 
 .app__guess-form {
      margin-top: 1.5rem;
+
 
 }
 
@@ -95,7 +114,8 @@ input:focus {
      font-size: 0.9em;
      font-family: sans-serif;
      min-width: 400px;
-     box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+     box-shadow: 0 0 20px rgba(0, 0, 0, 0.45);
+     border-radius: 10px;
 
 }
 
@@ -134,11 +154,37 @@ input:focus {
 }
 
 
-.app__error-container {
+.app__msg-container {
      display: inline-block;
-     color: red;
+
      height: 20px;
 }
+
+.error {
+     color: red;
+}
+
+.msg {
+     color: #009879;
+}
+
+
+/* Ripple effect */
+.ripple {
+     background-position: center;
+     transition: background 0.8s;
+}
+
+.ripple:hover {
+     background: #4b58e2 radial-gradient(circle, transparent 1%, #4b58e2 1%) center/15000%;
+}
+
+.ripple:active {
+     background-color: #313bac;
+     background-size: 100%;
+     transition: background 0s;
+}
+
 
 @media screen and (max-width: 950px) {
      input {
@@ -151,20 +197,20 @@ input:focus {
           min-width: 300px;
 
      }
-}
 
-/* Ripple effect */
-.ripple {
-     background-position: center;
-     transition: background 0.8s;
-}
+     .app__game-section-container {
 
-.ripple:hover {
-     background: #313bac radial-gradient(circle, transparent 1%, #4b58e2 1%) center/15000%;
-}
+          flex-direction: column;
 
-.ripple:active {
-     background-color: #313bac;
-     background-size: 100%;
-     transition: background 0s;
+     }
+
+     .app__game-section-container {
+
+          align-items: center;
+
+     }
+
+     .app__board-hint {
+          margin-top: 1rem;
+     }
 }

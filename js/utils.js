@@ -52,3 +52,11 @@ document.querySelector('.digits').addEventListener('input', function ({ target, 
 		target.nextElementSibling.focus();
 	}
 });
+
+function hashHandler() {}
+window.addEventListener('hashchange', hashHandler, false);
+
+if (location.hash != '#home') {
+	document.getElementById('hero').classList.remove('visible');
+	document.getElementById('hero').classList.add('hidden');
+}

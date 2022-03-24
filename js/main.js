@@ -6,23 +6,24 @@ let guessButtonElement = document.getElementById('guess_button');
 let formElement = document.getElementById('form');
 let nameFormElement = document.getElementById('name-form');
 let resultElement = document.getElementById('result');
-let errorElement = document.getElementById('error_validation');
+let msgElement = document.getElementById('user-msg');
 let timeElement = document.getElementById('time');
 let nameElement = document.getElementById('name');
+let startMsgElement = document.getElementById('start-new-game');
 let modals = document.querySelectorAll('[data-modal]');
 
 let gSecretNumbersArray = [];
 let gGuessNumberArray = [];
 let gGuessNumber = null;
 let gTotalStatus = [];
+let gGuessStatus;
 let gAllGuessesArray = [];
-let gErrors = null;
 let gScore = { name: '', tries: '', time: '' };
 let gTotalScores = [];
 let startTime, endTime;
 let gTime;
 let gTries;
-let gName;
+let gName = null;
 
 function startTimer() {
 	startTime = new Date();
@@ -36,7 +37,6 @@ function endTimer() {
 }
 
 const init = () => {
-	startTimer();
 	if (localStorage.getItem('NumToGuess')) {
 		gSecretNumbersArray = JSON.parse(localStorage.getItem('NumToGuess'));
 		console.log('Number to guess: ', Number(gSecretNumbersArray.join('')));
@@ -52,8 +52,21 @@ const init = () => {
 	}
 };
 
+const userMsg = (msg, color) => {
+	msgElement.innerText = msg;
+	msgElement.classList.add(color);
+	setTimeout(() => {
+		msgElement.innerText = '';
+		msgElement.classList.remove(color);
+	}, 3000);
+};
+
 const newGame = () => {
-	endTimer();
+	formElement.classList.contains('hidden') ? formElement.classList.remove('hidden') : null;
+	userMsg('I picked new number for you', 'msg');
+
+	startMsgElement.innerText = 'New Game';
+
 	clearData();
 	gSecretNumbersArray = generateNumber();
 	localStorage.setItem('NumToGuess', JSON.stringify(gSecretNumbersArray));
@@ -63,6 +76,9 @@ const newGame = () => {
 };
 
 const clearData = () => {
+	gScore = { name: '', tries: '', time: '' };
+	gName = null;
+	// gTotalScores = [];
 	gTotalStatus = [];
 	gAllGuessesArray = [];
 	guessedNumberElement1.value = '';
@@ -87,18 +103,18 @@ const gettingTheGuessNumber = () => {
 };
 
 const validate = () => {
-	gErrors = null;
 	gettingTheGuessNumber();
 	let data = gGuessNumberArray;
 
 	if (gGuessNumber / 1000 < 1) {
-		gErrors = '4 digits required!';
+		userMsg('4 digits required!', 'error');
+
 		return false;
 	}
 
 	for (let i = 0; i < gAllGuessesArray.length; i++) {
 		if (gAllGuessesArray[i] === gGuessNumber) {
-			gErrors = 'You already tried that number...';
+			userMsg('You already tried that number...', 'error');
 			return false;
 		}
 	}
@@ -107,7 +123,7 @@ const validate = () => {
 		for (let j = 0; j < data.length; j++) {
 			if (i !== j) {
 				if (data[i] === data[j]) {
-					gErrors = 'No repetitions allowed.';
+					userMsg('No repetitions allowed.', 'error');
 					return false;
 				}
 			}
@@ -118,17 +134,11 @@ const validate = () => {
 
 const checkGuess = e => {
 	e.preventDefault();
-
-	let guessStatus = getHint(gSecretNumbersArray, gGuessNumberArray);
+	gGuessStatus = getHint(gSecretNumbersArray, gGuessNumberArray);
 	gAllGuessesArray.push(gGuessNumber);
-
-	localStorage.setItem('totalGuesses', JSON.stringify(gAllGuessesArray));
-	gTotalStatus.push(guessStatus);
-	localStorage.setItem('totalStatus', JSON.stringify(gTotalStatus));
-
-	renderTable(gTotalStatus, gAllGuessesArray);
-	checkWin(guessStatus);
-
+	gTotalStatus.push(gGuessStatus);
+	checkWin(gGuessStatus);
+	storData();
 	formElement.reset();
 	guessedNumberElement1.focus();
 };
@@ -138,12 +148,6 @@ formElement.addEventListener('submit', e => {
 	validateData = validate();
 	if (validateData) {
 		checkGuess(e);
-	} else {
-		e.preventDefault();
-		errorElement.innerText = gErrors;
-		setTimeout(() => {
-			errorElement.innerText = '';
-		}, 2000);
 	}
 });
 
@@ -189,45 +193,85 @@ const renderTable = (status, guesses) => {
 const renderScoresTable = scores => {
 	var strHtml = '';
 	for (let i = 0; i < scores.length; i++) {
-		strHtml += `<tr><td >${scores[i].name}</td><td >${scores[i].tries}</td><td >${scores[i].time} seconds</td></tr>`;
+		strHtml += `<tr><td >${i + 1}</td><td >${scores[i].name}</td><td >${scores[i].tries}</td><td >${
+			scores[i].time
+		} seconds</td></tr>`;
 	}
 
 	var elScoreTab = document.getElementById('scores-table');
 	elScoreTab.innerHTML = strHtml;
 };
-
 const checkWin = guessStatus => {
-	if (guessStatus === '4A0B') {
-		endTimer();
-		gTries = gAllGuessesArray.length;
+	switch (guessStatus) {
+		case '4A0B':
+			endTimer();
+			userMsg('You did it!', 'msg');
+			formElement.classList.add('hidden');
+			gTries = gAllGuessesArray.length;
 
-		modals.forEach(function (trigger) {
-			{
-				var modal = document.getElementById(trigger.dataset.modal);
-				modal.classList.add('open');
-				nameElement.focus();
+			modals.forEach(function (trigger) {
+				{
+					let modal = document.getElementById(trigger.dataset.modal);
+					modal.classList.add('open');
+					nameElement.focus();
 
-				timeElement.innerText = `You did it with ${gTries} tries in ${gTime} seconds `;
-				nameFormElement.addEventListener('submit', e => {
-					e.preventDefault();
-					gName = nameElement.value;
-					gScore.name = gName;
-					gScore.time = gTime;
-					gScore.tries = gTries;
-					gTotalScores.push(gScore);
-					localStorage.setItem('totalScores', JSON.stringify(gTotalScores));
-					renderScoresTable(gTotalScores);
-					modal.classList.remove('open');
-				});
-				var exits = modal.querySelectorAll('.modal-exit');
-				exits.forEach(function (exit) {
-					exit.addEventListener('click', function (event) {
-						event.preventDefault();
+					timeElement.innerText = `You did it with ${gTries} tries in ${gTime} seconds `;
+					nameFormElement.addEventListener('submit', e => {
+						e.preventDefault();
+
 						modal.classList.remove('open');
 					});
-				});
-			}
-		});
-		newGame();
+					let exits = modal.querySelectorAll('.modal-exit');
+					exits.forEach(function (exit) {
+						exit.addEventListener('click', function (event) {
+							event.preventDefault();
+							console.log('close');
+							modal.classList.remove('open');
+						});
+					});
+				}
+			});
+			break;
+		case '0A0B':
+			userMsg('Try again...', 'msg');
+			break;
+		case '1A0B':
+		case '2A0B':
+			userMsg('You`r  getting close...', 'msg');
+			break;
+		case '3A0B':
+		case '0A3B':
+		case '2A2B':
+		case '1A3B':
+		case '0A4B':
+			userMsg('You`r  almost there...', 'msg');
+			break;
+		default:
+			userMsg('Nice try, but not enough...', 'msg');
 	}
+};
+
+nameFormElement.addEventListener('submit', e => {
+	e.preventDefault();
+	gName = nameElement.value;
+	storData(gName, gTime, gTries);
+});
+
+const sortRecords = records => {
+	records.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
+};
+
+const storData = (gName, gTime, gTries) => {
+	if (gName) {
+		gScore.name = gName;
+		gScore.time = gTime;
+		gScore.tries = gTries;
+		gTotalScores.push(gScore);
+		sortRecords(gTotalScores);
+		localStorage.setItem('totalScores', JSON.stringify(gTotalScores));
+		renderScoresTable(gTotalScores);
+	}
+	renderTable(gTotalStatus, gAllGuessesArray);
+	localStorage.setItem('totalGuesses', JSON.stringify(gAllGuessesArray));
+	localStorage.setItem('totalStatus', JSON.stringify(gTotalStatus));
 };

@@ -1,2 +1,3 @@
 # bull-cow-game
-all with vaniila js
+
+all with vanilla js

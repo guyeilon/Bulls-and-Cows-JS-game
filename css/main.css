@@ -14,27 +14,22 @@ section {
     display: none;
     position: absolute;
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
 
 }
 
-
+#hero {
+    display: block;
+}
 
 section:target {
     display: block;
 }
 
-#home {
-    display: block;
+.hidden {
+    display: none !important;
 }
 
-#guessed_number {
-    width: 100px;
-    border-radius: 50px;
+.visible {
+    display: block !important;
 }
-
-/* #guess_button {
-    border-radius: 50px;
-    width: 100px;
-    background-color: aqua;
-} */

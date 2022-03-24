@@ -1,12 +1,7 @@
-.app__instruction {
-     margin: 2rem;
-     margin-left: 5rem;
-}
-
 .app__instruction a {
      text-decoration: none;
      color: var(--secondary-color);
-     font-weight: bold;
+
 
 }
 
@@ -14,10 +9,4 @@
      background-color: var(--secondary-color);
      color: #fff;
 
-}
-
-@media screen and (max-width: 950px) {
-     .app__instruction {
-          margin: 0;
-     }
 }
