@@ -11,6 +11,7 @@ let timeElement = document.getElementById('time');
 let nameElement = document.getElementById('name');
 let startMsgElement = document.getElementById('start-new-game');
 let modals = document.querySelectorAll('[data-modal]');
+let hintElements;
 
 let gSecretNumbersArray = [];
 let gGuessNumberArray = [];
@@ -18,23 +19,13 @@ let gGuessNumber = null;
 let gTotalStatus = [];
 let gGuessStatus;
 let gAllGuessesArray = [];
-let gScore = { name: '', tries: '', time: '' };
+let gScore = { name: '', tries: '', time: '', hinted: '' };
 let gTotalScores = [];
 let startTime, endTime;
 let gTime;
 let gTries;
 let gName = null;
-
-function startTimer() {
-	startTime = new Date();
-}
-
-function endTimer() {
-	endTime = new Date();
-	let timeDiff = endTime - startTime;
-	timeDiff /= 1000;
-	gTime = Math.round(timeDiff);
-}
+let gSpecialNumber = [];
 
 const init = () => {
 	if (localStorage.getItem('NumToGuess')) {
@@ -81,6 +72,7 @@ const clearData = () => {
 	// gTotalScores = [];
 	gTotalStatus = [];
 	gAllGuessesArray = [];
+	gSpecialNumber = [];
 	guessedNumberElement1.value = '';
 	guessedNumberElement2.value = '';
 	guessedNumberElement3.value = '';
@@ -132,22 +124,25 @@ const validate = () => {
 	return true;
 };
 
-const checkGuess = e => {
-	e.preventDefault();
+const checkGuess = () => {
 	gGuessStatus = getHint(gSecretNumbersArray, gGuessNumberArray);
-	gAllGuessesArray.push(gGuessNumber);
-	gTotalStatus.push(gGuessStatus);
-	checkWin(gGuessStatus);
+
 	storData();
+	checkWin(gGuessStatus);
+	// print();
 	formElement.reset();
 	guessedNumberElement1.focus();
 };
 
 formElement.addEventListener('submit', e => {
-	let validateData = true;
+	e.preventDefault();
+	let validateData;
 	validateData = validate();
 	if (validateData) {
-		checkGuess(e);
+		checkGuess();
+	} else {
+		formElement.reset();
+		guessedNumberElement4.blur();
 	}
 });
 
@@ -181,6 +176,26 @@ const getHint = (secret, guess) => {
 	}
 };
 
+const markBulls = (secret, guessesArray) => {
+	gSpecialNumber = [];
+	for (let i = 0; i < guessesArray.length; i++) {
+		for (let j = 0; j < secret.length; j++) {
+			if (secret[j] == guessesArray[i][j]) {
+				guessesArray[i][j] = `<span class="hint_number">${guessesArray[i][j]}</span>`;
+			}
+		}
+		gSpecialNumber.push(guessesArray[i].join(''));
+	}
+	console.log(gSpecialNumber);
+};
+
+const showBull = () => {
+	for (let i = 0; i < hintElements.length; i++) {
+		hintElements[i].classList.add('show');
+	}
+	gScore.hinted = '💡';
+};
+
 const renderTable = (status, guesses) => {
 	var strHtml = '';
 	for (let i = 0; i < status.length; i++) {
@@ -195,7 +210,7 @@ const renderScoresTable = scores => {
 	for (let i = 0; i < scores.length; i++) {
 		strHtml += `<tr><td >${i + 1}</td><td >${scores[i].name}</td><td >${scores[i].tries}</td><td >${
 			scores[i].time
-		} seconds</td></tr>`;
+		} seconds</td><td >${scores[i].hinted ? scores[i].hinted : ''}</td></tr>`;
 	}
 
 	var elScoreTab = document.getElementById('scores-table');
@@ -225,7 +240,6 @@ const checkWin = guessStatus => {
 					exits.forEach(function (exit) {
 						exit.addEventListener('click', function (event) {
 							event.preventDefault();
-							console.log('close');
 							modal.classList.remove('open');
 						});
 					});
@@ -270,8 +284,35 @@ const storData = (gName, gTime, gTries) => {
 		sortRecords(gTotalScores);
 		localStorage.setItem('totalScores', JSON.stringify(gTotalScores));
 		renderScoresTable(gTotalScores);
+		return;
 	}
-	renderTable(gTotalStatus, gAllGuessesArray);
-	localStorage.setItem('totalGuesses', JSON.stringify(gAllGuessesArray));
+	gAllGuessesArray.push(gGuessNumberArray);
+	gTotalStatus.push(gGuessStatus);
+	markBulls(gSecretNumbersArray, gAllGuessesArray);
+	renderTable(gTotalStatus, gSpecialNumber);
+	hintElements = document.getElementsByClassName('hint_number');
+	localStorage.setItem('totalGuesses', JSON.stringify(gSpecialNumber));
 	localStorage.setItem('totalStatus', JSON.stringify(gTotalStatus));
+};
+
+function startTimer() {
+	startTime = new Date();
+}
+
+function endTimer() {
+	endTime = new Date();
+	let timeDiff = endTime - startTime;
+	timeDiff /= 1000;
+	gTime = Math.round(timeDiff);
+}
+
+// for debugging
+const print = () => {
+	console.log('gSpecialNumber', gSpecialNumber);
+	console.log('gAllGuessesArray', gAllGuessesArray);
+
+	console.log('gGuessNumber', gGuessNumber);
+	console.log('gGuessNumberArray', gGuessNumberArray);
+	console.log('gSecretNumbersArray', gSecretNumbersArray);
+	console.log('hintElements', hintElements);
 };
