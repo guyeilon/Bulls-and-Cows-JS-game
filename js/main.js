@@ -84,7 +84,7 @@ const clearData = () => {
 	localStorage.removeItem('totalGuesses');
 	renderTable(gTotalStatus, gAllGuessesArray);
 	resultElement.innerText = '';
-	showBull(false);
+	svgLampElement.classList.remove('light');
 };
 
 const gettingTheGuessNumber = () => {
@@ -129,6 +129,7 @@ const validate = () => {
 };
 
 const checkGuess = () => {
+	svgLampElement.classList.remove('light');
 	gGuessStatus = getHint(gSecretNumbersArray, gGuessNumberArray);
 	storData();
 	checkWin(gGuessStatus);
