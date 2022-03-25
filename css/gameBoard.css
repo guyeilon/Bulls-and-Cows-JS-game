@@ -198,10 +198,14 @@ input:focus {
      /* color: #FFFF66; */
      width: 35px;
      height: 35px;
-     fill: #FFFF66;
+     fill: var(--lightGray-color);
      stroke: black;
      margin-top: 1rem;
      cursor: pointer;
+}
+
+.light {
+     fill: #FFFF66 !important;
 }
 
 .show {

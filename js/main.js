@@ -11,6 +11,7 @@ let timeElement = document.getElementById('time');
 let nameElement = document.getElementById('name');
 let startMsgElement = document.getElementById('start-new-game');
 let modals = document.querySelectorAll('[data-modal]');
+let svgLampElement = document.getElementById('lamp');
 let hintElements;
 
 let gSecretNumbersArray = [];
@@ -68,9 +69,8 @@ const newGame = () => {
 };
 
 const clearData = () => {
-	gScore = { name: '', tries: '', time: '' };
-	gName = null;
-	// gTotalScores = [];
+	gScore = { name: '', tries: '', time: '', hinted: '' };
+	gName = '';
 	gTotalStatus = [];
 	gAllGuessesArray = [];
 	gSpecialNumber = [];
@@ -84,6 +84,7 @@ const clearData = () => {
 	localStorage.removeItem('totalGuesses');
 	renderTable(gTotalStatus, gAllGuessesArray);
 	resultElement.innerText = '';
+	showBull(false);
 };
 
 const gettingTheGuessNumber = () => {
@@ -191,10 +192,23 @@ const markBulls = (secret, guessesArray) => {
 };
 
 const showBull = () => {
-	for (let i = 0; i < hintElements.length; i++) {
-		hintElements[i].classList.add('show');
+	if (!svgLampElement.classList.contains('light')) {
+		if (hintElements && hintElements.length === 0) {
+			userMsg(`Can't help you yet...keep trying`, 'msg');
+		}
+		if (hintElements && hintElements.length > 0) {
+			console.log(hintElements);
+			svgLampElement.classList.add('light');
+			for (let i = 0; i < hintElements.length; i++) {
+				hintElements[i].classList.add('show');
+			}
+			gScore.hinted = '💡';
+			userMsg(`Helped?`, 'msg');
+		}
+	} else {
+		svgLampElement.classList.remove('light');
+		userMsg(`You're on your on!`, 'msg');
 	}
-	gScore.hinted = '💡';
 };
 
 const renderTable = (status, guesses) => {
@@ -262,7 +276,7 @@ const checkWin = guessStatus => {
 			userMsg('You`r  almost there...', 'msg');
 			break;
 		default:
-			userMsg('Nice try, but not enough...', 'msg');
+			userMsg('Want help? click me 💡 ', 'msg');
 	}
 };
 
