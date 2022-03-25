@@ -57,6 +57,6 @@ function hashHandler() {}
 window.addEventListener('hashchange', hashHandler, false);
 
 if (location.hash != '#home') {
-	document.getElementById('hero').classList.remove('visible');
-	document.getElementById('hero').classList.add('hidden');
+	document.getElementById('home').classList.remove('visible');
+	document.getElementById('home').classList.add('hidden');
 }

@@ -26,6 +26,7 @@ let gTime;
 let gTries;
 let gName = null;
 let gSpecialNumber = [];
+let gDataForHint = [];
 
 const init = () => {
 	if (localStorage.getItem('NumToGuess')) {
@@ -73,6 +74,7 @@ const clearData = () => {
 	gTotalStatus = [];
 	gAllGuessesArray = [];
 	gSpecialNumber = [];
+	gDataForHint = [];
 	guessedNumberElement1.value = '';
 	guessedNumberElement2.value = '';
 	guessedNumberElement3.value = '';
@@ -100,12 +102,13 @@ const validate = () => {
 
 	if (gGuessNumber / 1000 < 1) {
 		userMsg('4 digits required!', 'error');
-
 		return false;
 	}
 
 	for (let i = 0; i < gAllGuessesArray.length; i++) {
-		if (gAllGuessesArray[i] === gGuessNumber) {
+		console.log(gAllGuessesArray[i]);
+		console.log(gGuessNumber);
+		if (gAllGuessesArray[i] == gGuessNumber) {
 			userMsg('You already tried that number...', 'error');
 			return false;
 		}
@@ -126,10 +129,8 @@ const validate = () => {
 
 const checkGuess = () => {
 	gGuessStatus = getHint(gSecretNumbersArray, gGuessNumberArray);
-
 	storData();
 	checkWin(gGuessStatus);
-	// print();
 	formElement.reset();
 	guessedNumberElement1.focus();
 };
@@ -178,15 +179,15 @@ const getHint = (secret, guess) => {
 
 const markBulls = (secret, guessesArray) => {
 	gSpecialNumber = [];
+	let temp = [...guessesArray];
 	for (let i = 0; i < guessesArray.length; i++) {
 		for (let j = 0; j < secret.length; j++) {
 			if (secret[j] == guessesArray[i][j]) {
-				guessesArray[i][j] = `<span class="hint_number">${guessesArray[i][j]}</span>`;
+				temp[i][j] = `<span class="hint_number">${guessesArray[i][j]}</span>`;
 			}
 		}
-		gSpecialNumber.push(guessesArray[i].join(''));
+		gSpecialNumber.push(temp[i].join(''));
 	}
-	console.log(gSpecialNumber);
 };
 
 const showBull = () => {
@@ -210,7 +211,7 @@ const renderScoresTable = scores => {
 	for (let i = 0; i < scores.length; i++) {
 		strHtml += `<tr><td >${i + 1}</td><td >${scores[i].name}</td><td >${scores[i].tries}</td><td >${
 			scores[i].time
-		} seconds</td><td >${scores[i].hinted ? scores[i].hinted : ''}</td></tr>`;
+		} sec</td><td >${scores[i].hinted ? scores[i].hinted : ''}</td></tr>`;
 	}
 
 	var elScoreTab = document.getElementById('scores-table');
@@ -286,9 +287,10 @@ const storData = (gName, gTime, gTries) => {
 		renderScoresTable(gTotalScores);
 		return;
 	}
-	gAllGuessesArray.push(gGuessNumberArray);
 	gTotalStatus.push(gGuessStatus);
-	markBulls(gSecretNumbersArray, gAllGuessesArray);
+	gAllGuessesArray.push(gGuessNumberArray.join(''));
+	gDataForHint.push(gGuessNumberArray);
+	markBulls(gSecretNumbersArray, gDataForHint);
 	renderTable(gTotalStatus, gSpecialNumber);
 	hintElements = document.getElementsByClassName('hint_number');
 	localStorage.setItem('totalGuesses', JSON.stringify(gSpecialNumber));

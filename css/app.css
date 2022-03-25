@@ -50,6 +50,46 @@
 
 }
 
+nav {
+     padding: 1rem;
+     position: absolute;
+     z-index: 99;
+}
+
+
+
+section {
+     flex: 1;
+     padding: 2rem;
+     padding-top: 2rem;
+     font-size: 1.2rem;
+     display: none;
+     position: absolute;
+     width: 100%;
+     /* height: 100%; */
+
+}
+
+/* #hero {
+     display: block;
+} */
+
+section:target {
+     display: block;
+}
+
+#home {
+     display: block;
+}
+
+.hidden {
+     display: none !important;
+}
+
+.visible {
+     display: block !important;
+}
+
 .p-text {
      font-size: 1.5rem;
      text-align: left;

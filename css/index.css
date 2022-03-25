@@ -1,7 +1,7 @@
-@import 'navbar.css';
-@import 'modal.css';
-@import 'game.css';
-@import 'instructions.css';
-@import 'app.css';
 @import 'css-reset.css';
-@import 'main.css';
+@import 'app.css';
+@import 'navbar.css';
+@import 'gameBoard.css';
+@import 'modal.css';
+@import 'howToPlay.css';
+@import 'footer.css';
