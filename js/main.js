@@ -28,6 +28,7 @@ let gTries;
 let gName = null;
 let gSpecialNumber = [];
 let gDataForHint = [];
+let msgTimeout;
 
 const init = () => {
 	if (localStorage.getItem('NumToGuess')) {
@@ -46,9 +47,12 @@ const init = () => {
 };
 
 const userMsg = (msg, color) => {
+	clearTimeout(msgTimeout);
 	msgElement.innerText = msg;
 	msgElement.classList.add(color);
-	setTimeout(() => {
+
+	msgTimeout = setTimeout(() => {
+		clearTimeout(msgTimeout);
 		msgElement.innerText = '';
 		msgElement.classList.remove(color);
 	}, 3000);
@@ -204,10 +208,13 @@ const showBull = () => {
 				hintElements[i].classList.add('show');
 			}
 			gScore.hinted = '💡';
-			userMsg(`Helped?`, 'msg');
+			userMsg(`Here you go...`, 'msg');
 		}
 	} else {
 		svgLampElement.classList.remove('light');
+		for (let i = 0; i < hintElements.length; i++) {
+			hintElements[i].classList.remove('show');
+		}
 		userMsg(`You're on your on!`, 'msg');
 	}
 };
