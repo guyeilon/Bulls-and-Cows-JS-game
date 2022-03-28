@@ -228,12 +228,33 @@ input:focus {
      justify-content: center;
 }
 
+.level-form {
+     max-width: 100px;
+     text-align: center;
+
+
+}
+
+select:focus {
+     border: 2px solid yellowgreen;
+     outline: none;
+}
+
+
+select:focus {
+
+     animation-duration: 200ms;
+}
+
+
+
+
 
 @media screen and (max-width: 950px) {
      input {
           width: 3rem;
           height: 3rem;
-          font-size: 2rem;
+          /* font-size: 2rem; */
 
      }
 

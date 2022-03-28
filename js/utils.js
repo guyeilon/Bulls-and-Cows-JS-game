@@ -15,10 +15,10 @@ const randomNumber = () => {
 	return number;
 };
 
-const generateNumber = () => {
+const generateNumber = level => {
 	let secretNumberArray = [];
 	let numbersArray = createArrayOfNumbers(1, 9);
-	for (let i = 1; i <= 4; i++) {
+	for (let i = 1; i <= level; i++) {
 		let randomIndex = getRandomNumber(0, numbersArray.length - 1);
 		let randomNumber = numbersArray[randomIndex];
 		numbersArray.splice(randomIndex, 1);

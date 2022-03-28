@@ -2,6 +2,7 @@ let guessedNumberElement1 = document.getElementById('guessed_number1');
 let guessedNumberElement2 = document.getElementById('guessed_number2');
 let guessedNumberElement3 = document.getElementById('guessed_number3');
 let guessedNumberElement4 = document.getElementById('guessed_number4');
+let guessedNumberElement5 = document.getElementById('guessed_number5');
 let guessButtonElement = document.getElementById('guess_button');
 let formElement = document.getElementById('form');
 let nameFormElement = document.getElementById('name-form');
@@ -12,6 +13,9 @@ let nameElement = document.getElementById('name');
 let startMsgElement = document.getElementById('start-new-game');
 let modals = document.querySelectorAll('[data-modal]');
 let svgLampElement = document.getElementById('lamp');
+let levelElement = document.getElementById('level');
+let boardElement = document.getElementById('board-container');
+let descriptionElement = document.getElementById('description');
 let hintElements;
 
 let gSecretNumbersArray = [];
@@ -20,7 +24,7 @@ let gGuessNumber = null;
 let gTotalStatus = [];
 let gGuessStatus;
 let gAllGuessesArray = [];
-let gScore = { name: '', tries: '', time: '', hinted: '' };
+let gScore = { name: '', tries: '', time: '', hinted: '', level: '' };
 let gTotalScores = [];
 let startTime, endTime;
 let gTime;
@@ -29,6 +33,30 @@ let gName = null;
 let gSpecialNumber = [];
 let gDataForHint = [];
 let msgTimeout;
+let gLevel = 4;
+let gLevels = {
+	3: 'easy',
+	4: 'medium',
+	5: 'hard',
+};
+
+const getLevel = () => {
+	gLevel = Number(levelElement.value);
+
+	if (gLevel === 3) {
+		guessedNumberElement5?.classList.add('hidden');
+		guessedNumberElement4?.classList.add('hidden');
+	}
+	if (gLevel === 4) {
+		guessedNumberElement5?.classList.add('hidden');
+		guessedNumberElement4.classList.remove('hidden');
+	}
+	if (gLevel === 5) {
+		guessedNumberElement5.classList.remove('hidden');
+		guessedNumberElement4.classList.remove('hidden');
+	}
+	newGame();
+};
 
 const init = () => {
 	if (localStorage.getItem('NumToGuess')) {
@@ -47,12 +75,13 @@ const init = () => {
 };
 
 const userMsg = (msg, color) => {
+	msgElement.classList.contains('error') ? msgElement.classList.remove('error') : null;
+	msgElement.classList.contains('msg') ? msgElement.classList.remove('msg') : null;
 	clearTimeout(msgTimeout);
 	msgElement.innerText = msg;
 	msgElement.classList.add(color);
 
 	msgTimeout = setTimeout(() => {
-		clearTimeout(msgTimeout);
 		msgElement.innerText = '';
 		msgElement.classList.remove(color);
 	}, 3000);
@@ -60,12 +89,14 @@ const userMsg = (msg, color) => {
 
 const newGame = () => {
 	formElement.classList.contains('hidden') ? formElement.classList.remove('hidden') : null;
+	levelElement.classList.contains('hidden') ? levelElement.classList.remove('hidden') : null;
+
 	userMsg('I picked new number for you', 'msg');
 
 	startMsgElement.innerText = 'New Game';
 
 	clearData();
-	gSecretNumbersArray = generateNumber();
+	gSecretNumbersArray = generateNumber(gLevel);
 	localStorage.setItem('NumToGuess', JSON.stringify(gSecretNumbersArray));
 	console.log('Number to guess: ', Number(gSecretNumbersArray.join('')));
 	guessedNumberElement1.focus();
@@ -73,7 +104,7 @@ const newGame = () => {
 };
 
 const clearData = () => {
-	gScore = { name: '', tries: '', time: '', hinted: '' };
+	gScore = { name: '', tries: '', time: '', hinted: '', level: '' };
 	gName = '';
 	gTotalStatus = [];
 	gAllGuessesArray = [];
@@ -96,8 +127,16 @@ const gettingTheGuessNumber = () => {
 		guessedNumberElement1.value,
 		guessedNumberElement2.value,
 		guessedNumberElement3.value,
-		guessedNumberElement4.value,
+		// guessedNumberElement4.value,
+		// guessedNumberElement5.value,
 	];
+	if (gLevel === 4) {
+		gGuessNumberArray.push(guessedNumberElement4.value);
+	}
+	if (gLevel === 5) {
+		gGuessNumberArray.push(guessedNumberElement4.value);
+		gGuessNumberArray.push(guessedNumberElement5.value);
+	}
 	gGuessNumber = +gGuessNumberArray.join('');
 };
 
@@ -105,11 +144,18 @@ const validate = () => {
 	gettingTheGuessNumber();
 	let data = gGuessNumberArray;
 
-	if (gGuessNumber / 1000 < 1) {
+	if (gLevel === 3 && gGuessNumber / 100 < 1) {
+		userMsg('3 digits required!', 'error');
+		return false;
+	}
+	if (gLevel === 4 && gGuessNumber / 1000 < 1) {
 		userMsg('4 digits required!', 'error');
 		return false;
 	}
-
+	if (gLevel === 5 && gGuessNumber / 10000 < 1) {
+		userMsg('5 digits required!', 'error');
+		return false;
+	}
 	for (let i = 0; i < gAllGuessesArray.length; i++) {
 		console.log(gAllGuessesArray[i]);
 		console.log(gGuessNumber);
@@ -123,6 +169,8 @@ const validate = () => {
 		for (let j = 0; j < data.length; j++) {
 			if (i !== j) {
 				if (data[i] === data[j]) {
+					console.log(data[i]);
+					console.log(data[j]);
 					userMsg('No repetitions allowed.', 'error');
 					return false;
 				}
@@ -133,10 +181,11 @@ const validate = () => {
 };
 
 const checkGuess = () => {
+	boardElement.classList.contains('hidden') ? boardElement.classList.remove('hidden') : null;
 	svgLampElement.classList.remove('light');
 	gGuessStatus = getHint(gSecretNumbersArray, gGuessNumberArray);
 	storData();
-	checkWin(gGuessStatus);
+	checkWin(gGuessStatus, gLevel);
 	formElement.reset();
 	guessedNumberElement1.focus();
 };
@@ -202,7 +251,6 @@ const showBull = () => {
 			userMsg(`Can't help you yet...keep trying`, 'msg');
 		}
 		if (hintElements && hintElements.length > 0) {
-			console.log(hintElements);
 			svgLampElement.classList.add('light');
 			for (let i = 0; i < hintElements.length; i++) {
 				hintElements[i].classList.add('show');
@@ -231,17 +279,24 @@ const renderTable = (status, guesses) => {
 const renderScoresTable = scores => {
 	var strHtml = '';
 	for (let i = 0; i < scores.length; i++) {
-		strHtml += `<tr><td >${i + 1}</td><td >${scores[i].name}</td><td >${scores[i].tries}</td><td >${
-			scores[i].time
-		} sec</td><td >${scores[i].hinted ? scores[i].hinted : ''}</td></tr>`;
+		strHtml += `<tr>
+		<td >${i + 1}</td>
+		<td >${scores[i].name}</td>
+		<td >${scores[i].tries}</td>
+		<td >${scores[i].level}</td>
+		<td >${scores[i].time} sec</td>
+		<td >${scores[i].hinted ? scores[i].hinted : ''}</td>
+		</tr>`;
 	}
 
 	var elScoreTab = document.getElementById('scores-table');
 	elScoreTab.innerHTML = strHtml;
 };
-const checkWin = guessStatus => {
-	switch (guessStatus) {
-		case '4A0B':
+const checkWin = (status, level) => {
+	switch (true) {
+		case status === '3A0B' && level === 3:
+		case status === '4A0B' && level === 4:
+		case status === '5A0B' && level === 5:
 			endTimer();
 			userMsg('You did it!', 'msg');
 			formElement.classList.add('hidden');
@@ -269,18 +324,18 @@ const checkWin = guessStatus => {
 				}
 			});
 			break;
-		case '0A0B':
+		case status === '0A0B':
 			userMsg('Try again...', 'msg');
 			break;
-		case '1A0B':
-		case '2A0B':
+		case status === '1A0B':
+		case status === '2A0B':
 			userMsg('You`r  getting close...', 'msg');
 			break;
-		case '3A0B':
-		case '0A3B':
-		case '2A2B':
-		case '1A3B':
-		case '0A4B':
+		case status === '3A0B':
+		case status === '0A3B':
+		case status === '2A2B':
+		case status === '1A3B':
+		case status === '0A4B':
 			userMsg('You`r  almost there...', 'msg');
 			break;
 		default:
@@ -291,18 +346,19 @@ const checkWin = guessStatus => {
 nameFormElement.addEventListener('submit', e => {
 	e.preventDefault();
 	gName = nameElement.value;
-	storData(gName, gTime, gTries);
+	storData(gName, gTime, gTries, gLevel);
 });
 
 const sortRecords = records => {
 	records.sort((a, b) => parseFloat(a.time) - parseFloat(b.time));
 };
 
-const storData = (gName, gTime, gTries) => {
+const storData = (gName, gTime, gTries, gLevel) => {
 	if (gName) {
 		gScore.name = gName;
 		gScore.time = gTime;
 		gScore.tries = gTries;
+		gScore.level = gLevels[gLevel];
 		gTotalScores.push(gScore);
 		sortRecords(gTotalScores);
 		localStorage.setItem('totalScores', JSON.stringify(gTotalScores));

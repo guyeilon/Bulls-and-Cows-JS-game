@@ -90,13 +90,19 @@
 					<p class="p-text" id="description">Try to guess the number:</p>
 					<button onclick="newGame()" class="ripple " id="start-new-game">Start Game</button>
 
+
 				</div>
 				<div class="app__guess-form ">
+					<div class="app__msg-container" id="user-msg"></div>
 				</div>
-				<div class="app__msg-container" id="user-msg"></div>
-				<form id="form" class="hidden">
+				<select class="level-form hidden " id="level" name="level" onchange="getLevel()">
+					<option value="3">easy</option>
+					<option value="4" selected="selected">medium</option>
+					<option value="5">hard</option>
+				</select>
+				<form id="form" class="hidden app__flex">
 					<div class="digits  ">
-						<input id="guessed_number1" type="number" name="digit1" autocomplete="off"
+						<input id="guessed_number1" type="text" name="digit1" autocomplete="off"
 							inputmode="numeric" placeholder="?" />
 						<input id="guessed_number2" type="text" name="digit2" autocomplete="off"
 							inputmode="numeric" placeholder="?" />
@@ -104,13 +110,15 @@
 							inputmode="numeric" placeholder="?" />
 						<input id="guessed_number4" type="text" name="digit4" autocomplete="off"
 							inputmode="numeric" placeholder="?" />
+						<input class="hidden" id="guessed_number5" type="text" name="digit5" autocomplete="off"
+							inputmode="numeric" placeholder="?" />
 
 					</div>
 					<button type="submit" id="guess_button" class="ripple ">Guess!</button>
 				</form>
 
 			</div>
-			<div class="app__board-container">
+			<div class="app__board-container hidden" id="board-container">
 				<div class="app__board-hint ">
 					<div class="p-text  ">Your recent moves:</div>
 					<div onclick="showBull()" class="lamp">
@@ -168,6 +176,7 @@
 						<th>No.</th>
 						<th>Name</th>
 						<th>Tries</th>
+						<th>Level</th>
 						<th>Time</th>
 						<th>Hint</th>
 					</tr>
